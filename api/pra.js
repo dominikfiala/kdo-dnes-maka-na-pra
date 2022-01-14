@@ -18,7 +18,7 @@ const week = () => {
  */
 router.get("/", async (req, res) => {
     const target = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
-    const { privateKey } = JSON.parse(process.env.GOOGLE_SHEETS_PRIVATE_KEY);
+    const {privateKey} = JSON.parse(process.env.GOOGLE_SHEETS_PRIVATE_KEY);
     const jwt = new google.auth.JWT(
         process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
         null,
@@ -70,6 +70,30 @@ router.get("/", async (req, res) => {
                     text-align: center;
                 }
             </style>
+            <script>
+                self._ga = {
+                    // Full Measurement Protocol param reference:
+                    // https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
+                    data: {
+                        v: "1", // Measurement Protocol version.
+                        tid: "UA-217210080-1", // Tracking ID.
+                        cid: \`${Date.now()}${Math.random()}\`, // Client ID.
+                        dl: location.href, // Document location.
+                        aip: 1, // Anonymize IP
+                        dr: document.referrer,
+                    },
+                    send(additionalParams) {
+                        navigator.sendBeacon(
+                            "https://google-analytics.com/collect",
+                            new URLSearchParams({
+                                ...this.data,
+                                ...additionalParams,
+                            }).toString()
+                        );
+                    },
+                };
+                _ga.send({t: "pageview"});
+            </script>
         </head>
         <body>
         <h1>${vars.title}</h1>
