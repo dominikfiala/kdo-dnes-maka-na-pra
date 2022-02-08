@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const {google} = require("googleapis");
 const {startOfWeek, endOfWeek, format} = require("date-fns");
 const {cs} = require("date-fns/locale");
@@ -91,11 +92,6 @@ const template = (vars) => `<!DOCTYPE html>
     </body>
     </html>`;
 
-/**
- * GET product list.
- *
- * @return product list | empty.
- */
 router.get("/", async (req, res) => {
     const target = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
     const {privateKey} = JSON.parse(process.env.GOOGLE_SHEETS_PRIVATE_KEY);
