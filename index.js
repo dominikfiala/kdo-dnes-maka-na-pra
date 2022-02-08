@@ -3,6 +3,7 @@ const app = express();
 const pra = require("./api/pra");
 require('dotenv').config();
 
+app.use(express.static('public'));
 app.use("/", pra);
 
 const PORT = process.env.PORT || 1991;
