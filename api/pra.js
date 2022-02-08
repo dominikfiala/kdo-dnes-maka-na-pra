@@ -50,7 +50,6 @@ const template = (vars) => `<!DOCTYPE html>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="/static/favicon.ico" sizes="any">
-        <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/static/apple-touch-icon.png"><!-- 180×180 -->
         <link rel="manifest" href="/static/manifest.webmanifest">
         <title>${vars.title}</title>
