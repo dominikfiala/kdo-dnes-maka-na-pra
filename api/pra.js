@@ -49,10 +49,10 @@ const template = (vars) => `<!DOCTYPE html>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="icon" href="/icon.svg" type="image/svg+xml">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png"><!-- 180×180 -->
-        <link rel="manifest" href="/manifest.webmanifest">
+        <link rel="icon" href="/static/favicon.ico" sizes="any">
+        <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+        <link rel="apple-touch-icon" href="/static/apple-touch-icon.png"><!-- 180×180 -->
+        <link rel="manifest" href="/static/manifest.webmanifest">
         <title>${vars.title}</title>
         <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
         <style>

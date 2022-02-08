@@ -8,4 +8,4 @@ app.use('/static', express.static(path.join(__dirname + '/public')));
 app.use("/", pra);
 
 const PORT = process.env.PORT || 1991;
-app.listen(PORT, () => console.log(`Server is running in port ${PORT}`));
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
