@@ -4,7 +4,7 @@ const router = express.Router();
 const {google} = require("googleapis");
 const {startOfWeek, endOfWeek, format} = require("date-fns");
 const {cs} = require("date-fns/locale");
-const package = require('../package.json');
+const appInfo = require('../package.json');
 
 const rangeSuggestions = () => {
     const weekStart = startOfWeek(new Date, {weekStartsOn: 1});
@@ -17,6 +17,10 @@ const rangeSuggestions = () => {
 };
 
 const prepareTplVars = (response) => {
+    if (!response) {
+        return;
+    }
+
     const data = response.data.values;
     const amColIndex = (new Date).getDay() * 2;
     const pmColIndex = amColIndex + 1;
@@ -26,9 +30,9 @@ const prepareTplVars = (response) => {
 
     data.forEach((row, rowIndex) => {
         row.forEach((cell, colIndex) => {
-            if (colIndex === amColIndex && cell === 'ok') {
+            if (colIndex === amColIndex && cell.toLowerCase() === 'ok') {
                 amRowIndex = rowIndex;
-            } else if (colIndex === pmColIndex && cell === 'ok') {
+            } else if (colIndex === pmColIndex && cell.toLowerCase() === 'ok') {
                 pmRowIndex = rowIndex;
             }
         });
@@ -38,58 +42,9 @@ const prepareTplVars = (response) => {
     return {
         amName: data[amRowIndex] ? data[amRowIndex][1] : unknownName,
         pmName: data[pmRowIndex] ? data[pmRowIndex][1] : unknownName,
-        title: 'Kdo dnes maká na Pra?',
         date: format(new Date, 'EEEE d. MMMM Y', {locale: cs})
     }
 };
-
-const template = (vars) => `<!DOCTYPE html>
-    <html lang="cs">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="/static/favicon.ico" sizes="any">
-        <link rel="apple-touch-icon" href="/static/apple-touch-icon.png"><!-- 180×180 -->
-        <link rel="manifest" href="/static/manifest.webmanifest">
-        <title>${vars.title}</title>
-        <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
-        <style>
-            body {
-                padding: 1rem;
-                text-align: center;
-            }
-        </style>
-        <script>
-            self._ga = {
-                // Full Measurement Protocol param reference:
-                // https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
-                data: {
-                    v: "1", // Measurement Protocol version.
-                    tid: "UA-217210080-1", // Tracking ID.
-                    cid: \`${Date.now()}${Math.random()}\`, // Client ID.
-                    dl: location.href, // Document location.
-                    aip: 1, // Anonymize IP
-                    dr: document.referrer,
-                },
-                send(additionalParams) {
-                    navigator.sendBeacon(
-                        "https://google-analytics.com/collect",
-                        new URLSearchParams({
-                            ...this.data,
-                            ...additionalParams,
-                        }).toString()
-                    );
-                },
-            };
-            _ga.send({t: "pageview"});
-        </script>
-    </head>
-    <body>
-    <h1>${vars.title}</h1>
-    ${vars.body}
-    </body>
-    </html>`;
 
 router.get("/", async (req, res) => {
     const target = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
@@ -114,24 +69,16 @@ router.get("/", async (req, res) => {
         }
     }
 
-    let body = '<h2>Chyba získávání dat 🥺</h2>';
-    if (response) {
-        let vars = prepareTplVars(response);
-        body = `<h2>${vars.date}</h2>
-            <p>Odpoledne:</p>
-            <h3>${vars.amName}</h3>
-            <p>Večer:</p>
-            <h3>${vars.pmName}</h3>`;
-    }
-
     const data = {
-        title: package.description,
-        body: body,
+        title: appInfo.description,
+        ...prepareTplVars(response),
+        error: response === undefined,
     };
-    const payload = template(data);
+    
+    console.log(data);
 
     try {
-        res.status(200).send(payload);
+        res.status(200).render('index', data);
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server error");

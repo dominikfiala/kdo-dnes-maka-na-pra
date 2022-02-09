@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/static/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="/static/apple-touch-icon.png"><!-- 180×180 -->
+    <link rel="manifest" href="/static/manifest.webmanifest">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
+    <link href="/static/splashscreens/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/static/splashscreens/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/static/splashscreens/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+    <link href="/static/splashscreens/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+    <link href="/static/splashscreens/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/static/splashscreens/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+    <link href="/static/splashscreens/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/static/splashscreens/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/static/splashscreens/ipadpro3_splash.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <link href="/static/splashscreens/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+
+    <style>
+        body {
+            padding: 1rem;
+            text-align: center;
+        }
+    </style>
+    <script>
+        self._ga = {
+            // Full Measurement Protocol param reference:
+            // https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
+            data: {
+                v: "1", // Measurement Protocol version.
+                tid: "UA-217210080-1", // Tracking ID.
+                cid: `${Date.now()}${Math.random()}`, // Client ID.
+                    dl: location.href, // Document location.
+                    aip: 1, // Anonymize IP
+                    dr: document.referrer,
+                },
+                send(additionalParams) {
+                    navigator.sendBeacon(
+                        "https://google-analytics.com/collect",
+                        new URLSearchParams({
+                            ...this.data,
+                            ...additionalParams,
+                        }).toString()
+                    );
+                },
+            };
+            _ga.send({t: "pageview"});
+        </script>
+</head>
+<body>
+    <h1>{{title}}</h1>
+    {{#error}}
+      <h2>Chyba získávání dat 🥺</h2>
+    {{/error}}
+    {{^error}}
+        <h2>{{date}}</h2>
+        <p>Odpoledne:</p>
+        <h3>{{amName}}</h3>
+        <p>Večer:</p>
+        <h3>{{pmName}}</h3>
+    {{/error}}
+</body>
+</html>
