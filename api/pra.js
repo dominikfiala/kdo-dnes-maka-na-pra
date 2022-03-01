@@ -18,6 +18,20 @@ const rangeSuggestions = () => {
     ]
 };
 
+function changeTimezone(date, ianatz) {
+  // suppose the date is 12:00 UTC
+  var invdate = new Date(date.toLocaleString('en-US', {
+    timeZone: ianatz
+  }));
+
+  // then invdate will be 07:00 in Toronto
+  // and the diff is 5 hours
+  var diff = date.getTime() - invdate.getTime();
+
+  // so 12:00 in Toronto is 17:00 UTC
+  return new Date(date.getTime() - diff); // needs to substract
+};
+
 const prepareTplVars = (response) => {
     if (!response) {
         return;
@@ -25,7 +39,7 @@ const prepareTplVars = (response) => {
 
     const data = response.data.values;
 
-    const date = new Date;
+    const date = changeTimezone(new Date, 'Europe/Prague');
     // Do osmi rano ziskavam "vcerejsi" smenu
     var dayIndex = date.getHours() > 8
         ? date.getDay()
@@ -55,7 +69,7 @@ const prepareTplVars = (response) => {
     return {
         amName: data[amRowIndex] ? data[amRowIndex][1] : unknownName,
         pmName: data[pmRowIndex] ? data[pmRowIndex][1] : unknownName,
-        date: format(new Date, 'EEEE d. MMMM Y kk:mm', {locale: cs})
+        date: format(date, 'EEEE d. MMMM Y kk:mm', {locale: cs})
     }
 };
 
