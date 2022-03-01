@@ -13,6 +13,8 @@ const rangeSuggestions = () => {
         format(weekStart, 'd.M.') + '-' + format(weekEnd, 'd.M.Y'),
         format(weekStart, 'd.M.Y') + '-' + format(weekEnd, 'd.M.'),
         format(weekStart, 'd.M.Y') + '-' + format(weekEnd, 'd.M.Y'),
+        format(weekStart, 'd.M.') + '-' + format(weekEnd, 'd.M.yy'),
+        format(weekStart, 'd.M.yy') + '-' + format(weekEnd, 'd.M.yy'),
     ]
 };
 
@@ -22,7 +24,18 @@ const prepareTplVars = (response) => {
     }
 
     const data = response.data.values;
-    const amColIndex = (new Date).getDay() * 2;
+
+    const date = new Date;
+    // Do osmi rano ziskavam "vcerejsi" smenu
+    var dayIndex = date.getHours() > 8
+        ? date.getDay()
+        : date.getDay() - 1;
+    // Pokud jsem datum pretocil z pondeli tak se vratim na nedeli
+    if (dayIndex === 0) {
+        dayIndex = 7;
+    }
+
+    const amColIndex = dayIndex * 2;
     const pmColIndex = amColIndex + 1;
 
     let amRowIndex;
@@ -42,7 +55,7 @@ const prepareTplVars = (response) => {
     return {
         amName: data[amRowIndex] ? data[amRowIndex][1] : unknownName,
         pmName: data[pmRowIndex] ? data[pmRowIndex][1] : unknownName,
-        date: format(new Date, 'EEEE d. MMMM Y', {locale: cs})
+        date: format(new Date, 'EEEE d. MMMM Y kk:mm', {locale: cs})
     }
 };
 
@@ -74,7 +87,7 @@ router.get("/", async (req, res) => {
         ...prepareTplVars(response),
         error: response === undefined,
     };
-    
+
     console.log(data);
 
     try {
