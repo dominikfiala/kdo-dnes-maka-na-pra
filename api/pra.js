@@ -15,6 +15,7 @@ const rangeSuggestions = () => {
         format(weekStart, 'd.M.Y') + '-' + format(weekEnd, 'd.M.Y'),
         format(weekStart, 'd.M.') + '-' + format(weekEnd, 'd.M.yy'),
         format(weekStart, 'd.M.yy') + '-' + format(weekEnd, 'd.M.yy'),
+        format(weekStart, 'd.M.') + '-' + format(weekEnd, 'd.M.'),
     ]
 };
 
@@ -101,8 +102,6 @@ router.get("/", async (req, res) => {
         ...prepareTplVars(response),
         error: response === undefined,
     };
-
-    console.log(data);
 
     try {
         res.status(200).render('index', data);
