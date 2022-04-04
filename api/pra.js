@@ -16,6 +16,9 @@ const rangeSuggestions = () => {
         format(weekStart, 'd.M.') + '-' + format(weekEnd, 'd.M.yy'),
         format(weekStart, 'd.M.yy') + '-' + format(weekEnd, 'd.M.yy'),
         format(weekStart, 'd.M.') + '-' + format(weekEnd, 'd.M.'),
+        format(weekStart, 'd') + '-' + format(weekEnd, 'd.M.'),
+        format(weekStart, 'd') + '-' + format(weekEnd, 'd.M.Y'),
+        format(weekStart, 'd') + '-' + format(weekEnd, 'd.M.yy'),
     ]
 };
 
